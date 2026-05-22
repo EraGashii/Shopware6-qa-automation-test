@@ -8,12 +8,12 @@
 Automates **TC-P01 – Happy Path Guest Checkout with Cash on Delivery**:
 
 1. Opens the Shopware 6 demo storefront  
-2. Searches for a product ("Aerodynamic")  
+2. Opens an available demo product directly from the storefront
 3. Opens the product detail page and adds it to the cart  
 4. Navigates to the cart and verifies the item is present  
 5. Proceeds through guest checkout, filling in address details  
 6. Selects "Cash on Delivery" as the payment method  
-7. Places the order and asserts the confirmation page + order number
+7. Places the order and validates successful checkout flow
 
 ---
 
@@ -66,7 +66,7 @@ npx playwright show-report
 ## Project Structure
 
 ```
-automation/
+Shopware6-qa-automation-test/
 ├── playwright.config.ts       # Playwright config (browsers, base URL, timeouts)
 ├── tests/
 │   └── guestCheckout.spec.ts  # TC-P01 end-to-end test
@@ -94,7 +94,7 @@ Each page has its own class with stable locator strategies. Selectors prefer:
 Fragile nth-child chains are avoided.
 
 ### Assertions
-Every major step has a meaningful assertion (URL check, element visibility, item count, order number presence) — not just "the page loaded".
+Every major step has a meaningful assertion (URL checks, element visibility, cart validation, checkout navigation) — not just "the page loaded".
 
 ### Retries
 `retries: 1` in config handles occasional network flakiness on the public demo, without masking real failures.
@@ -103,7 +103,7 @@ Every major step has a meaningful assertion (URL check, element visibility, item
 
 ## What I Would Improve Given More Time
 
-1. **Cookie/consent handling** – The demo store may show a GDPR banner that blocks interactions. Add a shared fixture that dismisses it before each test.
+1. Improve confirmation page assertions by validating a visible confirmation message or generated order number if consistently available in the demo environment.
 2. **More test cases** – TC-P02 through TC-N04 from the test plan, especially the negative cases (empty cart, missing fields, invalid email).
 3. **Product availability guard** – If the demo store has no stock, the test fails misleadingly. A setup step that confirms stock before running would make failures clearer.
 4. **CI integration** – Add a `.github/workflows/playwright.yml` to run tests on push/PR with artifact upload for the HTML report.
